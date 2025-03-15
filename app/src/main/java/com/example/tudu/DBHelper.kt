@@ -62,11 +62,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
     fun listSelectAllToDos(): ArrayList<ToDo> {
         val db = this.readableDatabase
 
-        // Alteração da consulta SQL para filtrar e ordenar
         val cursor = db.rawQuery(
-            "SELECT * FROM todos",
-            null
-        )
+            "SELECT * FROM todos WHERE status IN ('Pendente', 'Em Andamento', 'Atrasada') " +
+                    "ORDER BY dataLimite ASC, CASE priority\n" +
+                    "        WHEN 'Baixa' THEN 1\n" +
+                    "        WHEN 'Média' THEN 2\n" +
+                    "        WHEN 'Alta' THEN 3\n" +
+                    "        ELSE 0 -- Para garantir que qualquer outro valor de prioridade seja tratado\n" +
+                    "    END DESC", null)
         val listaTodos: ArrayList<ToDo> = ArrayList()
 
         if (cursor.count > 0) {
@@ -129,13 +132,5 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
         val res = db.update("todos", values, "id = ?", arrayOf(id.toString()))
         db.close()
         return res
-    }
-
-    fun updateAllDates(newDate: String) {
-        val db = writableDatabase
-        val contentValues = ContentValues().apply {
-            put("dataLimite", newDate) // Substitua pelo nome real da sua coluna
-        }
-        db.update("todos", contentValues, null, null) // Substitua pelo nome da sua tabela
     }
 }

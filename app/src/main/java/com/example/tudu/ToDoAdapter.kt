@@ -5,13 +5,19 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tudu.databinding.ListItemTodoBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ToDoAdapter(private val context: Context, private val toDoList: ArrayList<ToDo>) : RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
+class ToDoAdapter(
+    private val context: Context,
+    private val toDoList: ArrayList<ToDo>,
+    private val editToDoLauncher: ActivityResultLauncher<Intent>
+) : RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
 
     inner class ToDoViewHolder(val binding: ListItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
@@ -20,7 +26,7 @@ class ToDoAdapter(private val context: Context, private val toDoList: ArrayList<
                 val intent = Intent(context, AddToDo::class.java).apply {
                     putExtra("TODO_ID", toDo.id)
                 }
-                context.startActivity(intent)
+                editToDoLauncher.launch(intent)
             }
         }
     }
@@ -32,7 +38,6 @@ class ToDoAdapter(private val context: Context, private val toDoList: ArrayList<
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val toDo = toDoList[position]
-        Log.d("TesteFORMATEDATE", "Lista de ToDos: ${toDo.dataLimite}")
         // Formatar a dataLimite
         val formattedDate = formatDate(toDo.dataLimite)
         holder.binding.textDataLimite.text = formattedDate
@@ -85,10 +90,34 @@ class ToDoAdapter(private val context: Context, private val toDoList: ArrayList<
         }
     }
 
+    class ToDoDiffCallback(private val oldList: List<ToDo>, private val newList: List<ToDo>) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            // Verifica se o item é o mesmo, geralmente você compara o ID
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            // Verifica se o conteúdo do item é o mesmo
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
+
+
     // Função para atualizar a lista
     fun updateList(newList: ArrayList<ToDo>) {
+        // Verifica as diferenças entre o novo e o antigo
+        val diffResult = DiffUtil.calculateDiff(ToDoDiffCallback(toDoList, newList))
+
+        // Atualiza a lista de dados
         toDoList.clear()
         toDoList.addAll(newList)
-        notifyItemInserted(newList.size)
+
+        // Notifica apenas as mudanças reais na RecyclerView
+        diffResult.dispatchUpdatesTo(this)
     }
 }

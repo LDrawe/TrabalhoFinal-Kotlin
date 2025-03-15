@@ -89,7 +89,7 @@
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="148dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="26dp"
         android:backgroundTint="#F44336"
         android:text="@string/deletar"
@@ -101,7 +101,7 @@
     <Button
         android:id="@+id/btnComplete"
         android:layout_width="148dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="62dp"
         android:backgroundTint="#4CAF50"
         android:text="@string/concluir"

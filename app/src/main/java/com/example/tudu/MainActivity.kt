@@ -31,14 +31,13 @@ class MainActivity : AppCompatActivity() {
         val db = DBHelper(this)
         val listaTodos = db.listSelectAllToDos()
         Log.d("TesteBancoDedados", "Lista de ToDos: $listaTodos")
-        adapter = ToDoAdapter(this, listaTodos)
+        adapter = ToDoAdapter(this, listaTodos, addToDoLauncher)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this) // Define o LayoutManager
 
-        val intent = Intent(this, AddToDo::class.java)
-
         binding.buttonInserir.setOnClickListener {
-            addToDoLauncher.launch(intent) // Lança a Activity de adicionar ToDo
+            val intent = Intent(this, AddToDo::class.java)
+            addToDoLauncher.launch(intent)
         }
     }
 }
