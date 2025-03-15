@@ -97,6 +97,25 @@ class AddToDo : AppCompatActivity() {
         }
     }
 
+    fun convertToISOFormat(date: String): String? {
+        return try {
+            // Formato original (que o usuário digita)
+            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+            // Formato de saída (ISO)
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+            // Faz o parse da data no formato original e converte para o formato ISO
+            val parsedDate = inputFormat.parse(date)
+
+            // Retorna a data formatada em ISO
+            outputFormat.format(parsedDate)
+        } catch (e: Exception) {
+            e.printStackTrace() // Trate o erro de formato se necessário
+            null
+        }
+    }
+
     private fun setupSpinners() {
         val priorityAdapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_item, Priority.entries.map { it.value }
@@ -142,7 +161,8 @@ class AddToDo : AppCompatActivity() {
 
         if (todoId == null) {
             // Criar novo To-Do
-            val res = db.todoInsert(title, description, dueDate, selectedPriority, selectedStatus)
+            val res = db.todoInsert(title, description,
+                convertToISOFormat(dueDate).toString(), selectedPriority, selectedStatus)
             if (res > 0) {
                 Toast.makeText(this, "Tarefa criada!", Toast.LENGTH_SHORT).show()
                 setResult(RESULT_OK)

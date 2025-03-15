@@ -107,8 +107,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
             val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
             val description = cursor.getString(cursor.getColumnIndexOrThrow("description"))
             val dataLimite = cursor.getString(cursor.getColumnIndexOrThrow("dataLimite"))
-            val priority = Priority.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("priority")))
-            val status = Status.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("status")))
+
+            val priorityIndex = cursor.getColumnIndex("priority")
+            val statusIndex = cursor.getColumnIndex("status")
+
+            val priority = Priority.fromValue(cursor.getString(priorityIndex))  // Correção aqui
+            val status = Status.fromValue(cursor.getString(statusIndex))  // Correção aqui
 
             todo = ToDo(id, title, description, dataLimite, priority, status)
         }
