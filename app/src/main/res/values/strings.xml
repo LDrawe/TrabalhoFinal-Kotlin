@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">TuDu</string>
+    <string name="titulo">Título</string>
+    <string name="descricao">Descrição</string>
+    <string name="data_limite">Data limite</string>
+    <string name="deletar">Deletar</string>
+    <string name="concluir">Concluir</string>
+    <string name="salvar">Salvar</string>
+    <string name="appname">TuDu</string>
+    <string name="title">Title</string>
+    <string name="pendente">Pendente</string>
+    <string name="alta">Alta</string>
 </resources>

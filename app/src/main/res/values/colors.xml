@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="status_pending">#FFC107</color> <!-- Cor amarela para 'Pendente' -->
+    <color name="status_in_progress">#2196F3</color> <!-- Cor azul para 'Em Andamento' -->
+    <color name="status_delayed">#D32F2F</color> <!-- Cor vermelha para 'Atrasada' -->
+    <color name="status_done">#4DB146</color> <!-- Cor verde para 'Concluída' -->
+    <color name="priority_high">#FF3D00</color> <!-- Cor vermelha para 'Alta' -->
+    <color name="priority_medium">#FF9800</color> <!-- Cor laranja para 'Média' -->
+    <color name="priority_low">#00A3F7</color> <!-- Cor azul para 'Baixa' -->
 </resources>

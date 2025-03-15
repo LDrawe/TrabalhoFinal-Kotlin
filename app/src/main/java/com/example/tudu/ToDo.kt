@@ -4,21 +4,21 @@ import android.os.Parcel
 import android.os.Parcelable
 
 enum class Priority(val value: String) {
-    LOW("Baixa"), ONGOING("Andamento"), HIGH("Alta");
+    LOW("Baixa"), MEDIUM("Média"), HIGH("Alta");
 
     companion object {
         fun fromValue(value: String): Priority {
-            return values().find { it.value == value } ?: LOW
+            return entries.find { it.value == value } ?: LOW
         }
     }
 }
 
 enum class Status(val value: String) {
-    PENDING("Pendente"), IN_PROGRESS("in progress"), DONE("Concluída"), DELAYED("Atrasada");
+    PENDING("Pendente"), IN_PROGRESS("Em Andamento"), DONE("Concluída"), DELAYED("Atrasada");
 
     companion object {
         fun fromValue(value: String): Status {
-            return values().find { it.value == value } ?: PENDING
+            return entries.find { it.value == value } ?: PENDING
         }
     }
 }

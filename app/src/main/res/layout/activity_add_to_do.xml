@@ -16,7 +16,7 @@
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="24dp"
         android:ems="10"
-        android:hint="Título"
+        android:hint="@string/titulo"
         android:inputType="textCapSentences"
         app:layout_constraintBottom_toTopOf="@+id/editDescription"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
         android:layout_marginEnd="59dp"
         android:layout_marginBottom="23dp"
         android:ems="10"
-        android:hint="Descrição"
+        android:hint="@string/descricao"
         android:inputType="textCapSentences"
         app:layout_constraintBottom_toTopOf="@+id/editDataLimite"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,8 +46,8 @@
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="19dp"
         android:ems="10"
-        android:hint="Data limite"
-        android:inputType="datetime|date"
+        android:hint="@string/data_limite"
+        android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/priority"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,9 +68,11 @@
         android:layout_width="148dp"
         android:layout_height="0dp"
         android:layout_marginBottom="207dp"
-        android:text="Salvar"
+        android:backgroundTint="#3F51B5"
+        android:text="@string/salvar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status" />
 
@@ -83,6 +85,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDataLimite" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#F44336"
+        android:text="@string/deletar"
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="547dp" />
+
+    <Button
+        android:id="@+id/btnComplete"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4CAF50"
+        android:text="@string/concluir"
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="621dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

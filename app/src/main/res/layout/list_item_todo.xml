@@ -17,37 +17,79 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Title TextView -->
-        <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="wrap_content"
+        <!-- Title, Date, Status and Priority in the same line -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="8dp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="start|end"
+            android:layout_marginBottom="8dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/title"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <!-- Data Limite -->
+            <TextView
+                android:id="@+id/textDataLimite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/data_limite"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="end"
+                android:paddingStart="8dp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
 
         <!-- Description TextView -->
         <TextView
             android:id="@+id/textDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
+            android:text="@string/descricao"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="8dp" />
 
-        <!-- Date TextView -->
-        <TextView
-            android:id="@+id/textDataLimite"
-            android:layout_width="wrap_content"
+        <!-- Status and Priority on the same line -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Data Limite"
-            android:textSize="12sp"
-            android:textColor="@android:color/black"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp" />
+            android:orientation="horizontal"
+            android:gravity="start|end"
+            android:layout_marginTop="8dp">
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/textStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pendente"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
+                android:background="@color/status_pending" />
+
+            <!-- Priority -->
+            <TextView
+                android:id="@+id/textPriority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alta"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:padding="4dp"
+                android:background="@color/priority_high" />
+        </LinearLayout>
 
     </LinearLayout>
 
