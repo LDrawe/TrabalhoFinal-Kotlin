@@ -111,8 +111,19 @@ class AddToDo : AppCompatActivity() {
             // Retorna a data formatada em ISO
             outputFormat.format(parsedDate)
         } catch (e: Exception) {
-            e.printStackTrace() // Trate o erro de formato se necessário
+            e.printStackTrace()
             null
+        }
+    }
+
+    private fun formatarDataParaExibicao(dataBanco: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val parsedDate = inputFormat.parse(dataBanco)
+            parsedDate?.let { outputFormat.format(it) } ?: dataBanco
+        } catch (e: Exception) {
+            dataBanco // Retorna como está se houver erro
         }
     }
 
@@ -135,7 +146,7 @@ class AddToDo : AppCompatActivity() {
         if (todo != null) {
             binding.editTitle.setText(todo.title)
             binding.editDescription.setText(todo.description)
-            binding.editDataLimite.setText(todo.dataLimite)
+            binding.editDataLimite.setText(formatarDataParaExibicao(todo.dataLimite))
             binding.priority.setSelection(Priority.entries.indexOf(todo.priority))
             binding.status.setSelection(Status.entries.indexOf(todo.status))
         }
@@ -172,7 +183,8 @@ class AddToDo : AppCompatActivity() {
             }
         } else {
             // Atualizar To-Do existente
-            val res = db.updateToDo(todoId!!, title, description, dueDate, selectedPriority, selectedStatus)
+            val res = db.updateToDo(todoId!!, title, description,
+                convertToISOFormat(dueDate).toString(), selectedPriority, selectedStatus)
             if (res > 0) {
                 Toast.makeText(this, "Tarefa atualizada!", Toast.LENGTH_SHORT).show()
                 setResult(RESULT_OK)

@@ -2,6 +2,7 @@ package com.example.tudu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         val db = DBHelper(this)
         val listaTodos = db.listSelectAllToDos()
-
+        Log.d("TesteBancoDedados", "Lista de ToDos: $listaTodos")
         adapter = ToDoAdapter(this, listaTodos)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this) // Define o LayoutManager

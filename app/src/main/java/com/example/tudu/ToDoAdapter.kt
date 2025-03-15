@@ -2,6 +2,7 @@ package com.example.tudu
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -31,7 +32,7 @@ class ToDoAdapter(private val context: Context, private val toDoList: ArrayList<
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val toDo = toDoList[position]
-
+        Log.d("TesteFORMATEDATE", "Lista de ToDos: ${toDo.dataLimite}")
         // Formatar a dataLimite
         val formattedDate = formatDate(toDo.dataLimite)
         holder.binding.textDataLimite.text = formattedDate

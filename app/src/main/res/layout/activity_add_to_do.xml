@@ -55,8 +55,8 @@
 
     <Spinner
         android:id="@+id/status"
-        android:layout_width="146dp"
-        android:layout_height="0dp"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="57dp"
         app:layout_constraintBottom_toTopOf="@+id/btnSave"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,11 +77,12 @@
 
     <Spinner
         android:id="@+id/priority"
-        android:layout_width="146dp"
-        android:layout_height="0dp"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="22dp"
         app:layout_constraintBottom_toTopOf="@+id/status"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDataLimite" />
 
