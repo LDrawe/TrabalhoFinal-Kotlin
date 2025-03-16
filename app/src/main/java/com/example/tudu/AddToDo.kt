@@ -3,6 +3,7 @@ package com.example.tudu
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -18,7 +19,7 @@ import java.util.Locale
 class AddToDo : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddToDoBinding
-    private var todoId: Int? = null // ID do To-Do (nulo se for novo)
+    private var todoId: Int? = null
     private lateinit var db: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,11 +41,14 @@ class AddToDo : AppCompatActivity() {
 
         // Verifica se recebeu um ID via Intent (modo edição)
         todoId = intent.getIntExtra("TODO_ID", -1).takeIf { it != -1 }
+
         if (todoId != null) {
-            loadToDoData(todoId!!)
+            val todo = loadToDoData(todoId!!)
+            if (todo?.status == Status.DONE)
+                binding.btnComplete.visibility = View.GONE
         } else {
-            binding.btnDelete.visibility = View.GONE // Oculta botão excluir em novo To-Do
-            binding.btnComplete.visibility = View.GONE // Oculta botão concluir
+            binding.btnDelete.visibility = View.GONE
+            binding.btnComplete.visibility = View.GONE
         }
 
         binding.btnSave.setOnClickListener { saveToDo() }
@@ -99,17 +103,11 @@ class AddToDo : AppCompatActivity() {
 
     fun convertToISOFormat(date: String): String? {
         return try {
-            // Formato original (que o usuário digita)
             val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-            // Formato de saída (ISO)
             val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-            // Faz o parse da data no formato original e converte para o formato ISO
             val parsedDate = inputFormat.parse(date)
 
-            // Retorna a data formatada em ISO
-            outputFormat.format(parsedDate)
+            outputFormat.format(parsedDate!!)
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -128,6 +126,7 @@ class AddToDo : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
+
         val priorityAdapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_item, Priority.entries.map { it.value }
         )
@@ -135,13 +134,15 @@ class AddToDo : AppCompatActivity() {
         binding.priority.adapter = priorityAdapter
 
         val statusAdapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_item, Status.entries.map { it.value }
+            this, android.R.layout.simple_spinner_item,
+            Status.entries.map { it.value }
         )
+
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.status.adapter = statusAdapter
     }
 
-    private fun loadToDoData(id: Int) {
+    private fun loadToDoData(id: Int): ToDo? {
         val todo = db.getToDoById(id)
         if (todo != null) {
             binding.editTitle.setText(todo.title)
@@ -150,6 +151,7 @@ class AddToDo : AppCompatActivity() {
             binding.priority.setSelection(Priority.entries.indexOf(todo.priority))
             binding.status.setSelection(Status.entries.indexOf(todo.status))
         }
+        return todo
     }
 
     private fun saveToDo() {
@@ -182,7 +184,6 @@ class AddToDo : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao criar tarefa!", Toast.LENGTH_SHORT).show()
             }
         } else {
-            // Atualizar To-Do existente
             val res = db.updateToDo(todoId!!, title, description,
                 convertToISOFormat(dueDate).toString(), selectedPriority, selectedStatus)
             if (res > 0) {

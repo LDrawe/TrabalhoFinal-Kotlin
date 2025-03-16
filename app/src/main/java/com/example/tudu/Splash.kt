@@ -20,11 +20,10 @@ class Splash : AppCompatActivity() {
             insets
         }
 
-        // Navigate to MainActivity after 3 seconds
         CoroutineScope(Dispatchers.Main).launch {
-            delay(3000) // 3 seconds delay
+            delay(3000)
             startActivity(Intent(this@Splash, MainActivity::class.java))
-            finish() // Close splash screen
+            finish()
         }
     }
 }

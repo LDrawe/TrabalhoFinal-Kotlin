@@ -38,6 +38,18 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
         return res
     }
 
+    fun updateAllToDosStatusToPending() {
+        val db = writableDatabase
+        val query = "UPDATE todos SET status = 'Pendente'"
+
+        try {
+            db.execSQL(query)
+        } catch (e: Exception) {
+        } finally {
+            db.close()
+        }
+    }
+
     fun updateToDo(id: Int, title: String, description: String, dataLimite: String, priority: Priority, status: Status): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -59,6 +71,45 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
         return res
     }
 
+    fun listDone(): ArrayList<ToDo> {
+        val db = this.readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM todos WHERE status = 'Concluída'" +
+                    "ORDER BY dataLimite ASC, CASE priority\n" +
+                    "        WHEN 'Baixa' THEN 1\n" +
+                    "        WHEN 'Média' THEN 2\n" +
+                    "        WHEN 'Alta' THEN 3\n" +
+                    "        ELSE 0\n" +
+                    "    END DESC", null)
+        val listaConcluidos: ArrayList<ToDo> = ArrayList()
+
+        if (cursor.count > 0) {
+            cursor.moveToFirst()
+            do {
+                val idIndex = cursor.getColumnIndex("id")
+                val titleIndex = cursor.getColumnIndex("title")
+                val descriptionIndex = cursor.getColumnIndex("description")
+                val dataLimiteIndex = cursor.getColumnIndex("dataLimite")
+                val priorityIndex = cursor.getColumnIndex("priority")
+                val statusIndex = cursor.getColumnIndex("status")
+
+                val id = cursor.getInt(idIndex)
+                val title = cursor.getString(titleIndex)
+                val description = cursor.getString(descriptionIndex)
+                val dataLimite = cursor.getString(dataLimiteIndex)
+                val priority = Priority.fromValue(cursor.getString(priorityIndex))
+                val status = Status.fromValue(cursor.getString(statusIndex))
+
+                listaConcluidos.add(ToDo(id, title, description, dataLimite, priority, status))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return listaConcluidos
+    }
+
     fun listSelectAllToDos(): ArrayList<ToDo> {
         val db = this.readableDatabase
 
@@ -68,7 +119,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
                     "        WHEN 'Baixa' THEN 1\n" +
                     "        WHEN 'Média' THEN 2\n" +
                     "        WHEN 'Alta' THEN 3\n" +
-                    "        ELSE 0 -- Para garantir que qualquer outro valor de prioridade seja tratado\n" +
+                    "        ELSE 0 \n" +
                     "    END DESC", null)
         val listaTodos: ArrayList<ToDo> = ArrayList()
 
@@ -86,8 +137,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
                 val title = cursor.getString(titleIndex)
                 val description = cursor.getString(descriptionIndex)
                 val dataLimite = cursor.getString(dataLimiteIndex)
-                val priority = Priority.fromValue(cursor.getString(priorityIndex)) // Conversão segura
-                val status = Status.fromValue(cursor.getString(statusIndex)) // Conversão segura
+                val priority = Priority.fromValue(cursor.getString(priorityIndex))
+                val status = Status.fromValue(cursor.getString(statusIndex))
 
                 listaTodos.add(ToDo(id, title, description, dataLimite, priority, status))
             } while (cursor.moveToNext())
@@ -95,10 +146,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
 
         cursor.close()
         db.close()
-        android.util.Log.e("Lista", listaTodos.toString())
         return listaTodos
     }
-
 
     fun getToDoById(id: Int): ToDo? {
         val db = this.readableDatabase
@@ -113,14 +162,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
             val priorityIndex = cursor.getColumnIndex("priority")
             val statusIndex = cursor.getColumnIndex("status")
 
-            val priority = Priority.fromValue(cursor.getString(priorityIndex))  // Correção aqui
-            val status = Status.fromValue(cursor.getString(statusIndex))  // Correção aqui
+            val priority = Priority.fromValue(cursor.getString(priorityIndex))
+            val status = Status.fromValue(cursor.getString(statusIndex))
 
             todo = ToDo(id, title, description, dataLimite, priority, status)
         }
 
         cursor.close()
         db.close()
+
         return todo
     }
 

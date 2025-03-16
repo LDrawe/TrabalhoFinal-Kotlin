@@ -2,7 +2,6 @@ package com.example.tudu
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
@@ -38,19 +37,15 @@ class ToDoAdapter(
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val toDo = toDoList[position]
-        // Formatar a dataLimite
         val formattedDate = formatDate(toDo.dataLimite)
         holder.binding.textDataLimite.text = formattedDate
 
-        // Definir os valores nos TextViews
         holder.binding.textTitle.text = toDo.title
         holder.binding.textDescription.text = toDo.description
 
-        // Definir status e prioridade com cores de fundo
         holder.binding.textStatus.text = toDo.status.value
         holder.binding.textPriority.text = toDo.priority.value
 
-        // Definir as cores de fundo com base no status e prioridade
         holder.binding.textStatus.setBackgroundColor(getStatusColor(toDo.status))
         holder.binding.textPriority.setBackgroundColor(getPriorityColor(toDo.priority))
     }
@@ -59,7 +54,6 @@ class ToDoAdapter(
         return toDoList.size
     }
 
-    // Função para formatar a data
     private fun formatDate(dateString: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -71,7 +65,6 @@ class ToDoAdapter(
         }
     }
 
-    // Função para obter a cor do status
     private fun getStatusColor(status: Status): Int {
         return when (status) {
             Status.PENDING -> ContextCompat.getColor(context, R.color.status_pending)
@@ -81,7 +74,6 @@ class ToDoAdapter(
         }
     }
 
-    // Função para obter a cor da prioridade
     private fun getPriorityColor(priority: Priority): Int {
         return when (priority) {
             Priority.LOW -> ContextCompat.getColor(context, R.color.priority_low)
@@ -97,27 +89,20 @@ class ToDoAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Verifica se o item é o mesmo, geralmente você compara o ID
             return oldList[oldItemPosition].id == newList[newItemPosition].id
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Verifica se o conteúdo do item é o mesmo
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 
-
-    // Função para atualizar a lista
     fun updateList(newList: ArrayList<ToDo>) {
-        // Verifica as diferenças entre o novo e o antigo
         val diffResult = DiffUtil.calculateDiff(ToDoDiffCallback(toDoList, newList))
 
-        // Atualiza a lista de dados
         toDoList.clear()
         toDoList.addAll(newList)
 
-        // Notifica apenas as mudanças reais na RecyclerView
         diffResult.dispatchUpdatesTo(this)
     }
 }

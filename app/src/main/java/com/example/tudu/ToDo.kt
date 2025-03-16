@@ -14,7 +14,7 @@ enum class Priority(val value: String) {
 }
 
 enum class Status(val value: String) {
-    PENDING("Pendente"), IN_PROGRESS("Em Andamento"), DONE("Concluída"), DELAYED("Atrasada");
+    PENDING("Pendente"), IN_PROGRESS("Em Andamento"), DELAYED("Atrasada"), DONE("Concluída");
 
     companion object {
         fun fromValue(value: String): Status {
